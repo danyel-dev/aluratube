@@ -1,6 +1,5 @@
 import config from '../config.json'
 import styled from 'styled-components';
-import { CSSReset } from '../src/components/CSSReset';
 import Menu from '../src/components/Menu';
 import { StyledTimeline } from '../src/components/Timeline';
 import React, { useState } from "react";
@@ -11,7 +10,6 @@ function HomePage() {
 
     return (
         <div>
-            <CSSReset />
             <Menu searchValue={searchValue} setSearchValue={setSearchValue} />
             <Header />
             <Timeline searchValue={searchValue} playlists={config.playlists} />
@@ -23,6 +21,8 @@ export default HomePage;
 
 
 const StyledHeader = styled.div`
+    background-color: ${({ theme }) => theme.backgroundLevel1};
+
     .user-info {
         display: flex;
         align-items: center;
@@ -67,8 +67,7 @@ function Timeline({searchValue, ...propriedades}) {
         <StyledTimeline>
             {playlistNames.map((playlistName) => {
                 const videos = propriedades.playlists[playlistName];
-                // console.log(playlistName);
-                // console.log(videos);
+         
                 return (
                     <section key={playlistName}>
                         <h2>{playlistName}</h2>
@@ -94,7 +93,3 @@ function Timeline({searchValue, ...propriedades}) {
         </StyledTimeline>
     )
 }
-
-
-
-
