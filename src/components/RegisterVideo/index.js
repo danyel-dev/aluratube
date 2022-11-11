@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StyledRegisterVideo } from "./styles";
-
+import { createClient } from '@supabase/supabase-js'
 
 function useForm(props) {
     const [values, setValues] = useState(props.initialValues)
@@ -24,6 +24,11 @@ function useForm(props) {
 }
 
 
+const PROJECT_URL = 'https://vrpugbfyyevfhxzgpsgs.supabase.co'
+const PUBLIC_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZycHVnYmZ5eWV2Zmh4emdwc2dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjgxNzgzMTEsImV4cCI6MTk4Mzc1NDMxMX0.Y0bg9j9_9euYxitixcYuzpw4EmRNjW7sjGFUbj83Ksk'
+const supabase = createClient(PROJECT_URL, PUBLIC_KEY)
+
+
 export default function RegisterVideo() {
     const [formVisible, setFormVisible] = useState(true)
 
@@ -40,6 +45,16 @@ export default function RegisterVideo() {
             {formVisible? (
                 <form onSubmit={(e) => {
                     e.preventDefault()
+
+                    supabase.from("video").insert({
+                        title: formCadastro.values.titulo,
+                        url: formCadastro.values.url,
+                        thumb: 'https://img.youtube.com/vi/QsqatJxAUtk/hqdefault.jpg',
+                        playlist: 'Jogos',
+                    }).then(response => {
+                        console.log(response)
+                    }).catch(err => console.log(err))
+
                     setFormVisible(false)
                     formCadastro.clearForm()
                 }}>

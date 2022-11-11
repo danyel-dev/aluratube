@@ -3,16 +3,35 @@ import styled from 'styled-components';
 import Menu from '../src/components/Menu';
 import { StyledTimeline } from '../src/components/Timeline';
 import React, { useState } from "react";
-
+import { videoService } from "../src/services/videoService";
+ 
 
 function HomePage() {
+    const service = videoService();
     const [searchValue, setSearchValue] = useState("")
+    const [playlists, setPlaylists] = useState({});
+
+    React.useEffect(() => {
+        service.getAllVideos()
+            .then((dados) => {
+                const newPlaylists = {...playlists}
+                
+                dados.data.forEach((video) => {
+                    if(!newPlaylists[video.playlist]) {
+                        newPlaylists[video.playlist] = []
+                    }
+                    newPlaylists[video.playlist].push(video)
+                })
+                setPlaylists(newPlaylists);
+                console.log(newPlaylists)
+            })
+    }, [])
 
     return (
         <div>
             <Menu searchValue={searchValue} setSearchValue={setSearchValue} />
             <Header />
-            <Timeline searchValue={searchValue} playlists={config.playlists} />
+            <Timeline searchValue={searchValue} playlists={playlists} />
         </div>
     );
 }
